@@ -36,12 +36,17 @@
             // 
             this.grid.AllowUserToAddRows = false;
             this.grid.AllowUserToDeleteRows = false;
+            this.grid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
             this.grid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.grid.Location = new System.Drawing.Point(0, 2);
+            this.grid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grid.Location = new System.Drawing.Point(0, 0);
             this.grid.Name = "grid";
             this.grid.ReadOnly = true;
-            this.grid.Size = new System.Drawing.Size(343, 283);
+            this.grid.RowHeadersVisible = false;
+            this.grid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.grid.Size = new System.Drawing.Size(344, 284);
             this.grid.TabIndex = 0;
+            this.grid.VirtualMode = true;
             // 
             // BookView
             // 
