@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Threading;
 using WpfApplication2.Model;
 
 namespace WpfApplication2.ViewModel
@@ -16,17 +18,28 @@ namespace WpfApplication2.ViewModel
     {
         private ObservableCollection<BookRow> _book = new ObservableCollection<BookRow>();
 
+        
         public ObservableCollection<BookRow> Book
         {
           get { return _book; }
           set { _book = value; }
         }
 
+        private int _render;
+        public int Render
+        {
+            get { return _render; }
+            set { _render = value; OnPropertyChanged("Render"); }
+        }
+
         public object _lock = new object();
+        static int countRender = 0;
 
 
         public BookViewModel()
         {
+
+
             //BindingOperations.EnableCollectionSynchronization(Book, _lock);
             Observable.Interval(TimeSpan.FromMilliseconds(300))
                 .SubscribeOn(NewThreadScheduler.Default)
@@ -46,6 +59,14 @@ namespace WpfApplication2.ViewModel
 
                             });
                         }
+
+//                         Dispatcher.CurrentDispatcher.BeginInvoke(
+//                           DispatcherPriority.Loaded,
+//                           new Action(() =>
+//                           {
+//                               countRender++;
+//                               Render = countRender;
+//                           }));
                     });
                    
 

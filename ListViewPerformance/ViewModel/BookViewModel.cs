@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Threading;
 using WpfApplication2.Model;
 
 namespace WpfApplication2.ViewModel
@@ -24,6 +25,13 @@ namespace WpfApplication2.ViewModel
 
         public object _lock = new object();
 
+        static int countRender = 0;
+        private int _render;
+        public int Render
+        {
+            get { return _render; }
+            set { _render = value; OnPropertyChanged("Render"); }
+        }
 
         public BookViewModel()
         {
@@ -46,6 +54,14 @@ namespace WpfApplication2.ViewModel
 
                             });
                         }
+
+//                         Dispatcher.CurrentDispatcher.BeginInvoke(
+//                               DispatcherPriority.Loaded,
+//                               new Action(() =>
+//                               {
+//                                   countRender++;
+//                                   Render = countRender;
+//                               }));
                     });
                    
 
