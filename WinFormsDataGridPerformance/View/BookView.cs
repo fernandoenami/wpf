@@ -34,28 +34,45 @@ namespace WinFormsDataGridPerformance
 
         private void BookView_Load(object sender, EventArgs e)
         {
+            RXDataProduce.StartProduceData();
+
             var source = new BindingSource(this.Book, null);
             grid.DataSource = source;
 
-            //BindingOperations.EnableCollectionSynchronization(Book, _lock);
-            Observable.Interval(TimeSpan.FromMilliseconds(300))
+            RXDataProduce.stream
                 .SubscribeOn(System.Reactive.Concurrency.TaskPoolScheduler.Default)
+                //.Sample(TimeSpan.FromMilliseconds(500))
+                .Buffer(TimeSpan.FromMilliseconds(5000), 500)
                 .ObserveOn(this.grid)
-                .Subscribe(_ =>
+                .Subscribe(b =>
                 {
                     this.Book.Clear();
-                    for (int i = 0; i < 10; i++)
+                    foreach (var item in b)
                     {
-                        this.Book.Add(new BookRow()
-                        {
-                            posicao = i,
-                            qtdCompra = new Random().Next(999),
-                            qtdVenda = new Random().Next(999),
-                            pxCompra = new Random().Next(99),
-                            pxVenda = new Random().Next(99)
-
-                        });
+                        this.Book.Add(item);
                     }
+                    
+                });
+
+                                    //BindingOperations.EnableCollectionSynchronization(Book, _lock);
+                //                    Observable.Interval(TimeSpan.FromMilliseconds(300))
+                //.SubscribeOn(System.Reactive.Concurrency.TaskPoolScheduler.Default)
+                //.ObserveOn(this.grid)
+                //.Subscribe(_ =>
+                //{
+                //    this.Book.Clear();
+                //    for (int i = 0; i < 10; i++)
+                //    {
+                //        this.Book.Add(new BookRow()
+                //        {
+                //            posicao = i,
+                //            qtdCompra = new Random().Next(999),
+                //            qtdVenda = new Random().Next(999),
+                //            pxCompra = new Random().Next(99),
+                //            pxVenda = new Random().Next(99)
+
+                //        });
+                //    }
 
                     //                         Dispatcher.CurrentDispatcher.BeginInvoke(
                     //                           DispatcherPriority.Loaded,
@@ -64,7 +81,7 @@ namespace WinFormsDataGridPerformance
                     //                               countRender++;
                     //                               Render = countRender;
                     //                           }));
-                });
+                //});
         }
     }
 }
